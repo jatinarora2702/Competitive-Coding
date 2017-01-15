@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+typedef long double ldbl;
+
+inline int nextInt() {int x; scanf("%d", &x); return x;}
+inline ll nextLong() {ll x; scanf("%lld", &x); return x;}
+
+#define eprintf(...) fprintf (stderr, __VA_ARGS__)
+
+const int MAX_N = (int)1e6 + 100;
+
+ll a[MAX_N];
+
+ldbl getVal(int n, ll limit) {
+    ll sum = 0;
+    for (int i = 0; i < n; ++i)
+        sum += a[i];
+
+    vector <ll> cnt(n, 0);
+    for (int i = 0; i < n; ++i) {
+        cnt[i] += limit / sum;
+    }
+
+    limit %= sum;
+
+    ldbl ret = 0;
+    for (int i = 0; i < n; ++i) {
+        if (limit >= a[i]) {
+            ++cnt[i];
+            limit -= a[i];
+        } else {
+            ret += (limit * limit) / 2.0;
+            break;
+        }
+    }
+
+    for (int i = 0; i < n; ++i) {
+        ret += (ldbl)cnt[i] * a[i] * a[i] / 2.0;
+    }
+    return ret;    
+}
+
+void solve() {
+    int n = nextInt();
+    int l = nextInt();
+    int r = nextInt();
+    
+    for (int i = 0; i < n; ++i) {
+        a[i] = nextInt();
+    }
+
+    ldbl ansL = getVal(n, l);
+    ldbl ansR = getVal(n, r);
+
+    ldbl ans = (ansR - ansL) / (ldbl)(r - l);
+    cerr << setprecision(15) << fixed << ans << "\n";
+    cout << setprecision(15) << fixed << ans << "\n";
+}
+
+int main() {
+    int numTests = nextInt();
+    for (int testId = 1; testId <= numTests; ++testId) {
+        cerr << "Case #" << testId << ": ";
+        cout << "Case #" << testId << ": ";
+        solve();
+    }
+    return 0;
+}
